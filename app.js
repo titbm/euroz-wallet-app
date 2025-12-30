@@ -193,32 +193,14 @@ async function updateBalances() {
         const eurozContractRead = isPrivateKeyMode 
             ? eurozContract 
             : new ethers.Contract(EUROZ_ADDRESS, EUROZ_ABI, provider);
-        const ceurozContractRead = isPrivateKeyMode 
-            ? ceurozContract 
-            : new ethers.Contract(CEUROZ_ADDRESS, CEUROZ_ABI, provider);
 
         const eurozBalance = await eurozContractRead.balanceOf(userAddress);
-        
-        // cEUROZ might return encrypted balance, try to get it differently
-        let ceurozFormatted = '0.0';
-        try {
-            const ceurozBalance = await ceurozContractRead.balanceOf(userAddress);
-            // Check if it's a BigNumber
-            if (ceurozBalance._isBigNumber || typeof ceurozBalance === 'object') {
-                ceurozFormatted = ethers.utils.formatUnits(ceurozBalance, 6);
-            } else {
-                ceurozFormatted = '0.0';
-            }
-        } catch (err) {
-            console.log('cEUROZ balance error:', err);
-            ceurozFormatted = 'N/A (encrypted)';
-        }
-        
         const eurozFormatted = ethers.utils.formatUnits(eurozBalance, 6);
 
+        // cEUROZ is a confidential token, balance is encrypted
         document.getElementById('balanceInfo').innerHTML = `
             <strong>EUROZ:</strong> ${eurozFormatted}<br>
-            <strong>cEUROZ:</strong> ${ceurozFormatted}
+            <strong>cEUROZ:</strong> <span style="color: #666; font-size: 12px;">Encrypted (confidential token)</span>
         `;
     } catch (error) {
         console.error('Balance error:', error);
