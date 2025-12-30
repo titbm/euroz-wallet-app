@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EUROZ Mint & Wrap</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 500px;
+            width: 100%;
+            padding: 40px;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+
+        .network-badge {
+            display: inline-block;
+            background: #fbbf24;
+            color: #78350f;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .wallet-section {
+            margin-bottom: 30px;
+        }
+
+        .connection-options {
+            display: flex;
+            gap: 10px;
+        }
+
+        .connection-options button {
+            flex: 1;
+        }
+
+        .private-key-section {
+            margin-top: 20px;
+            padding: 20px;
+            background: #fef3c7;
+            border-radius: 10px;
+            border: 2px solid #fbbf24;
+        }
+
+        .wallet-info {
+            background: #f3f4f6;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 10px;
+        }
+
+        .wallet-address {
+            font-family: monospace;
+            font-size: 14px;
+            color: #666;
+            word-break: break-all;
+        }
+
+        .balance {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #333;
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-success {
+            background: #10b981;
+            color: white;
+        }
+
+        .btn-success:hover:not(:disabled) {
+            background: #059669;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(16, 185, 129, 0.4);
+        }
+
+        .btn-secondary {
+            background: #8b5cf6;
+            color: white;
+        }
+
+        .btn-secondary:hover:not(:disabled) {
+            background: #7c3aed;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(139, 92, 246, 0.4);
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .section {
+            margin-top: 30px;
+            padding-top: 30px;
+            border-top: 2px solid #e5e7eb;
+        }
+
+        .section h2 {
+            color: #333;
+            font-size: 20px;
+            margin-bottom: 15px;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #666;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: monospace;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .status {
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .status.success {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .status.error {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .status.info {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .tx-link {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .tx-link:hover {
+            text-decoration: underline;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 14px;
+            height: 14px;
+            border: 2px solid #ffffff;
+            border-radius: 50%;
+            border-top-color: transparent;
+            animation: spin 0.8s linear infinite;
+            margin-right: 8px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .step-info {
+            background: #fef3c7;
+            color: #78350f;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 13px;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>EUROZ Mint & Wrap</h1>
+        <span class="network-badge">Sepolia Testnet</span>
+
+        <div class="wallet-section">
+            <div class="connection-options">
+                <button id="connectMetamaskBtn" class="btn-primary">Connect MetaMask</button>
+                <button id="showPrivateKeyBtn" class="btn-secondary">Use Private Key</button>
+            </div>
+
+            <div id="privateKeySection" class="private-key-section" style="display: none;">
+                <div class="step-info">
+                    ⚠️ Private key will be stored only in memory and cleared on page refresh. Clipboard will be cleared after paste.
+                </div>
+                <div class="input-group">
+                    <label>Private Key (with or without 0x):</label>
+                    <input 
+                        type="password" 
+                        id="privateKeyInput" 
+                        placeholder="0x... or just hex characters" 
+                        autocomplete="off"
+                        spellcheck="false"
+                    >
+                </div>
+                <button id="connectPrivateKeyBtn" class="btn-success">Connect with Private Key</button>
+                <div id="connectionStatus"></div>
+            </div>
+
+            <div id="walletInfo" class="wallet-info" style="display: none;">
+                <div class="wallet-address" id="walletAddress"></div>
+                <div class="balance" id="balanceInfo"></div>
+                <button id="disconnectBtn" class="btn-secondary" style="margin-top: 10px;">Disconnect</button>
+            </div>
+        </div>
+
+        <div class="section" id="mintSection" style="display: none;">
+            <h2>1. Mint EUROZ</h2>
+            <p style="color: #666; font-size: 14px; margin-bottom: 15px;">
+                Mint 10 EUROZ tokens to your wallet
+            </p>
+            <button id="mintBtn" class="btn-success">Mint 10 EUROZ</button>
+            <div id="mintStatus"></div>
+        </div>
+
+        <div class="section" id="wrapSection" style="display: none;">
+            <h2>2. Wrap EUROZ → cEUROZ</h2>
+            <div class="step-info">
+                ⚠️ First approve, then wrap. Two transactions required.
+            </div>
+            
+            <div class="input-group">
+                <label>Amount to wrap (EUROZ):</label>
+                <input type="number" id="wrapAmount" placeholder="1.0" step="0.000001" min="0">
+            </div>
+
+            <button id="approveBtn" class="btn-secondary">Step 1: Approve</button>
+            <button id="wrapBtn" class="btn-secondary" disabled>Step 2: Wrap</button>
+            <div id="wrapStatus"></div>
+        </div>
+
+        <div class="section" id="automationSection" style="display: none;">
+            <h2>3. Automation</h2>
+            <div class="step-info">
+                🤖 Auto-mint if balance < 3 EUROZ, then send 3 random wrap transactions every 5-6 minutes
+            </div>
+            
+            <button id="startAutomationBtn" class="btn-success">Start Automation</button>
+            <button id="stopAutomationBtn" class="btn-secondary" style="display: none;">Stop Automation</button>
+            
+            <div id="automationStatus"></div>
+            <div id="countdownTimer" style="margin-top: 10px; padding: 10px; background: #dbeafe; border-radius: 8px; font-weight: 600; text-align: center; display: none;"></div>
+            <div id="automationLog" style="margin-top: 15px; max-height: 300px; overflow-y: auto; background: #f9fafb; padding: 10px; border-radius: 8px; font-size: 12px; font-family: monospace; display: none;"></div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.umd.min.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
